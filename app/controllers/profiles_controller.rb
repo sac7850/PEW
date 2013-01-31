@@ -40,22 +40,21 @@ class ProfilesController < ApplicationController
         
         #@metadata_types = client.describe[:metadata_objects]
         
+        # Custom Objects
         @custom_objects = client.list_metadata('CustomObject').collect { |t| t.full_name }
+        
+        # Profiles
         @profiles = client.list_metadata('Profile').collect { |t| t.full_name }
         
-        
-        
-        #respond_to do |format|
-        #    format.html # index.html.erb
-        #    format.json { render json: @custom_objects }
-        #end
 
     end
     
     def create
       
+       # Get the selected object
        current_object_val = params[:custom_objects]
         
+       # Create the Array
        profileArr = Array.new
         
        # Get the profiles and add them to the array
@@ -63,18 +62,17 @@ class ProfilesController < ApplicationController
          profileArr.push(profile[0])
        end
       
+       # Create the zip file
        Zip::ZipOutputStream::open("Profiles.zip") { |io|
       
          #Zip::ZipFile.open("MyFile.zip", Zip::ZipFile::CREATE) {|zipfile|
          # Create the XML values
          profileArr.each do |profile|
            
+           # Create the new profile file
            io.put_next_entry(profile + ".profile")
-           
-           #File.open(profile + ".profile", 'w') {|f|
-           #f = File.new("out", "w")
              
-           # Create the XML
+           # Create the XML and write to the new file
            xml = Builder::XmlMarkup.new(:target=>io, :indent=>2)
            xml.instruct! :xml, :version=>"1.0"
            
@@ -133,7 +131,7 @@ class ProfilesController < ApplicationController
        
        }
        
-       
+       # Download the file
        send_file "Profiles.zip"
     end
 end
