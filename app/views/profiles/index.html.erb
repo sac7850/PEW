@@ -1,0 +1,32 @@
+<%=form_tag(:controller => "profiles", :action => "create", :method => "post")%>
+<%= select_tag "custom_objects", options_for_select(@custom_objects.sort! { |a,b| a <=> b }) %>
+<br><br>
+<div width="900px">
+	<table width="900px" border="1" cellpadding="2" cellspacing="2" style="border-collapse: collapse;">
+		<tr>
+			<td align="center">Read Only</td>
+			<td align="center">Visible</td>
+			<td align="center">Create</td>
+			<td align="center">Delete</td>
+			<td align="center">View All</td>
+			<td align="center">Modify All</td>
+			<td width="50%"></td>
+		</tr>
+		<%@profiles = @profiles.sort! { |a,b| a <=> b}%>
+		<%@profiles.each do |profile|%>
+			<td align="center"><%=check_box("read", profile, {}, "yes", "no")%></td>
+			<td align="center"><%=check_box("edit", profile, {}, "yes", "no")%></td>
+			<td align="center"><%=check_box("create", profile, {}, "yes", "no")%></td>
+			<td align="center"><%=check_box("delete", profile, {}, "yes", "no")%></td>
+			<td align="center"><%=check_box("view_all", profile, {}, "yes", "no")%></td>
+			<td align="center"><%=check_box("modify_all", profile, {}, "yes", "no")%></td>
+			<td>
+				&nbsp;&nbsp;<%=profile%>
+	        </td>
+		</tr>
+		<%end%>
+	</table>
+</div>
+<%= hidden_field_tag(:values, @profiles) %>
+<%= submit_tag "Submit" %>
+</form>
